@@ -1,11 +1,13 @@
 /* Copyright 2025 GymFlexa LLC */
-const commander = require('commander')
-const { printJson, withJson, fail } = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveGymId = require('./resolveGymId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import * as commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import { bold, cyan, dim } from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveGymId from './resolveGymId.js'
 
 function membersCommand() {
   const command = new commander.Command('members')
@@ -22,11 +24,7 @@ function membersCommand() {
       .option('--userId <userId>', 'only members linked to this user')
       .option('--id <id>', 'a single member id')
       .option('--ids <ids>', 'comma-separated member ids')
-      .option(
-        '-n, --limit <limit>',
-        'max results (server-capped at 200)',
-        '25',
-      )
+      .option('-n, --limit <limit>', 'max results (server-capped at 200)', '25')
       .option('--skip <skip>', 'skip the first N results')
       .option('--fields <fields>', 'comma-separated projection of fields'),
   ).action(async options => {
@@ -121,9 +119,7 @@ function membersCommand() {
   withJson(
     command
       .command('add')
-      .description(
-        'create a member (POST /api/members, fires member.created)',
-      )
+      .description('create a member (POST /api/members, fires member.created)')
       .requiredOption('--name <name>', 'member full name')
       .option(
         '--gymId <gymId>',
@@ -134,7 +130,10 @@ function membersCommand() {
       .option('--language <language>', 'two-letter language code, e.g. en')
       .option('--dateOfBirth <dateOfBirth>', 'date of birth, e.g. 1986-01-31')
       .option('--note <note>', 'free-text note kept on the member')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -171,7 +170,10 @@ function membersCommand() {
       .option('--language <language>', 'two-letter language code, e.g. en')
       .option('--dateOfBirth <dateOfBirth>', 'date of birth, e.g. 1986-01-31')
       .option('--note <note>', 'free-text note kept on the member')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (memberId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -227,4 +229,4 @@ function membersCommand() {
   return command
 }
 
-module.exports = membersCommand
+export default membersCommand

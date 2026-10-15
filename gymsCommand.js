@@ -1,10 +1,12 @@
 /* Copyright 2025 GymFlexa LLC */
-const commander = require('commander')
-const { printJson, withJson, fail } = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import * as commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import { bold, cyan, dim } from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
 
 function gymsCommand() {
   const command = new commander.Command('gyms')
@@ -16,11 +18,7 @@ function gymsCommand() {
     command
       .command('list')
       .description('list the gyms of your organization (GET /api/gyms)')
-      .option(
-        '-n, --limit <limit>',
-        'max results (server-capped at 200)',
-        '25',
-      )
+      .option('-n, --limit <limit>', 'max results (server-capped at 200)', '25')
       .option('--skip <skip>', 'skip the first N results')
       .option(
         '--sortField <sortField>',
@@ -108,7 +106,9 @@ function gymsCommand() {
         )
       }
       if (gym.openingHours?.length) {
-        console.log(`${cyan('openingHours')}  ${gym.openingHours.length} rule(s)`)
+        console.log(
+          `${cyan('openingHours')}  ${gym.openingHours.length} rule(s)`,
+        )
       }
       if (gym.creationTime) {
         console.log(`${cyan('created')}  ${gym.creationTime}`)
@@ -133,7 +133,10 @@ function gymsCommand() {
         '--appointmentDuration <minutes>',
         'default appointment length in minutes',
       )
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -173,7 +176,10 @@ function gymsCommand() {
         '--appointmentDuration <minutes>',
         'default appointment length in minutes',
       )
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (gymId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -226,4 +232,4 @@ function gymsCommand() {
   return command
 }
 
-module.exports = gymsCommand
+export default gymsCommand

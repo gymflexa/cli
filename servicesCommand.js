@@ -1,11 +1,13 @@
 /* Copyright 2025 GymFlexa LLC */
-const commander = require('commander')
-const { printJson, withJson, fail } = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveGymId = require('./resolveGymId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import * as commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import { bold, cyan, dim } from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveGymId from './resolveGymId.js'
 
 function servicesCommand() {
   const command = new commander.Command('services')
@@ -18,11 +20,7 @@ function servicesCommand() {
       .command('list')
       .description('list services (GET /api/services)')
       .option('--gymId <gymId>', 'only services of this gym')
-      .option(
-        '-n, --limit <limit>',
-        'max results (server-capped at 200)',
-        '25',
-      )
+      .option('-n, --limit <limit>', 'max results (server-capped at 200)', '25')
       .option('--skip <skip>', 'skip the first N results')
       .option('--sortField <sortField>', 'field to sort by, e.g. name')
       .option('--sortDirection <sortDirection>', 'ASC or DESC (default DESC)')
@@ -127,7 +125,10 @@ function servicesCommand() {
       .option('--price <price>', 'price in the gym currency, e.g. 50')
       .option('--description <description>', 'service description')
       .option('--color <color>', 'calendar color, e.g. #EC407A')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -158,7 +159,10 @@ function servicesCommand() {
       .option('--price <price>', 'price in the gym currency, e.g. 50')
       .option('--description <description>', 'service description')
       .option('--color <color>', 'calendar color, e.g. #EC407A')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (serviceId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -212,4 +216,4 @@ function servicesCommand() {
   return command
 }
 
-module.exports = servicesCommand
+export default servicesCommand

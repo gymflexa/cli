@@ -6,7 +6,7 @@
 // key must send it. On update, when the caller passed no --gymId, reuse the
 // gymId of the existing record (costs one extra read, and therefore the
 // matching `:read` scope).
-module.exports = async function resolveGymId(options, body, getExisting) {
+export default async function resolveGymId(options, body, getExisting) {
   let gymId = options.gymId || body.gymId
   if (!gymId) {
     const existing = await getExisting()

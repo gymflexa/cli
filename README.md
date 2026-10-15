@@ -18,7 +18,7 @@ Requires Node.js 18 or newer.
 ## Quick start
 
 ```bash
-gymflexa login                                   # choose browser or API key login
+gymflexa login                                   # choose browser, another device or API key login
 gymflexa gyms list                               # the gyms of your organization
 gymflexa members list --gymId 64a1f2c9e4b0a1b2c3d4e5f6 -n 10
 gymflexa appointments list --startTime 2026-08-01T00:00:00.000Z
@@ -41,12 +41,18 @@ gymflexa signup --email founder@example.com --json
 
 ## Authentication
 
-Two ways in, both stored in `~/.gymflexa/`:
+Three ways in, all stored in `~/.gymflexa/`:
 
 - **Browser** — `gymflexa login --browser` opens
   [app.gymflexa.com](https://app.gymflexa.com) in your browser to log in with
   your GymFlexa account, then stores a token session. Tokens are refreshed
   automatically; requests carry `Authorization: Token base64(<jwt>)`.
+- **Another device** — `gymflexa login --device` is for a terminal whose browser
+  you cannot use: a remote desktop without copy and paste, an SSH session, a
+  server. It prints a link, a QR code and a one-time code: open the link on your
+  phone or on any computer where you are signed in to GymFlexa, check that the
+  code matches and approve. The terminal then stores a session of its own, as
+  `--browser` does. The code works once and expires after ten minutes.
 - **API key** — `gymflexa login --with-key` prompts for an API key secret with
   a masked input. An owner of your organization creates the key in the
   GymFlexa dashboard: open your gym and use **API keys**
@@ -106,8 +112,9 @@ gymflexa members list --json -n 100 | jq '.[] | {id: ._id, name, email}'
 
 ```bash
 gymflexa signup --email founder@example.com  # create an account and log in
-gymflexa login                # interactive: choose browser or API key login
+gymflexa login                # interactive: browser, another device or API key
 gymflexa login --browser      # log in through app.gymflexa.com
+gymflexa login --device       # approve the login from a phone or another computer
 gymflexa login --with-key     # prompt for an API key secret (masked)
 gymflexa logout               # clear everything stored in ~/.gymflexa/
 ```

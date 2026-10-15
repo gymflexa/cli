@@ -1,14 +1,22 @@
 /* Copyright 2025 GymFlexa LLC */
-const commander = require('commander')
-const { printJson, withJson, fail } = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveGymId = require('./resolveGymId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import * as commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import { bold, cyan, dim } from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveGymId from './resolveGymId.js'
 
 // gymflexa/model/Appointment.js — the statuses the API stores.
-const STATUSES = ['SCHEDULED', 'MEMBER_ARRIVED', 'NO_SHOW', 'CANCELED']
+const STATUSES = [
+  'REQUESTED',
+  'SCHEDULED',
+  'MEMBER_ARRIVED',
+  'NO_SHOW',
+  'CANCELED',
+]
 
 function appointmentsCommand() {
   const command = new commander.Command('appointments')
@@ -31,11 +39,7 @@ function appointmentsCommand() {
         '--endTime <endTime>',
         'ISO timestamp — keep appointments ending before it',
       )
-      .option(
-        '-n, --limit <limit>',
-        'max results (server-capped at 200)',
-        '25',
-      )
+      .option('-n, --limit <limit>', 'max results (server-capped at 200)', '25')
       .option('--skip <skip>', 'skip the first N results')
       .option('--sortField <sortField>', 'field to sort by, e.g. startTime')
       .option('--sortDirection <sortDirection>', 'ASC or DESC (default DESC)')
@@ -160,7 +164,10 @@ function appointmentsCommand() {
       )
       .option('--status <status>', `one of ${STATUSES.join(', ')}`)
       .option('--note <note>', 'free-text note kept on the appointment')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -196,7 +203,10 @@ function appointmentsCommand() {
       .option('--gymId <gymId>', 'gym the appointment belongs to')
       .option('--status <status>', `one of ${STATUSES.join(', ')}`)
       .option('--note <note>', 'free-text note kept on the appointment')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (appointmentId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -253,4 +263,4 @@ function appointmentsCommand() {
   return command
 }
 
-module.exports = appointmentsCommand
+export default appointmentsCommand

@@ -1,11 +1,13 @@
 /* Copyright 2025 GymFlexa LLC */
-const commander = require('commander')
-const { printJson, withJson, fail } = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveGymId = require('./resolveGymId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import * as commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import { bold, cyan, dim } from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveGymId from './resolveGymId.js'
 
 // gymflexa/model/Payment.js — the statuses the API stores.
 const STATUSES = ['SUCCEEDED', 'FAILED', 'CANCELED']
@@ -154,7 +156,10 @@ function paymentsCommand() {
       .option('--currency <currency>', 'three-letter currency code, e.g. EUR')
       .option('--status <status>', `one of ${STATUSES.join(', ')}`)
       .option('--note <note>', 'free-text note kept on the payment')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -187,7 +192,10 @@ function paymentsCommand() {
       .option('--currency <currency>', 'three-letter currency code, e.g. EUR')
       .option('--status <status>', `one of ${STATUSES.join(', ')}`)
       .option('--note <note>', 'free-text note kept on the payment')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (paymentId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -242,4 +250,4 @@ function paymentsCommand() {
   return command
 }
 
-module.exports = paymentsCommand
+export default paymentsCommand
